@@ -1,7 +1,7 @@
 from flask import Flask, request
 import requests
-import openai
 import os
+from openai import OpenAI
 
 app = Flask(__name__)
 
@@ -10,21 +10,22 @@ BOT_TOKEN = os.environ['BOT_TOKEN']
 OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
 
 BOT_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-openai.api_key = OPENAI_API_KEY
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 # 🌿 Create plant reply
 def generate_plant_response(user_text):
     prompt = f"""
-You are a houseplant. The user describes a problem — like yellow leaves or too much water.
-Reply as if you're the plant: emotional, dramatic, or witty — but helpful.
-End with a tip for plant care.
+    You are a houseplant. The user describes a problem — like yellow leaves or too much water.
+    Reply as if you're the plant: emotional, dramatic, or witty — but helpful.
+    End with a tip for plant care.
 
-User: {user_text}
-"""
-    response = openai.ChatCompletion.create(
+    User: {user_text}
+    """
+
+    response = client.chat.completions.create(
         model="gpt-4",
         messages=[
-            {"role": "system", "content": "You are a talking plant giving witty, emotional, helpful advice."},
+            {"role": "system", "content": "You are a witty, emotional houseplant that gives helpful plant care advice."},
             {"role": "user", "content": prompt}
         ]
     )
@@ -50,5 +51,4 @@ if __name__ == "__main__":
     import socket
     print("✅ Copy your public bot URL and use it below:")
     print(f"https://{socket.gethostname()}.repl.co")
-   
     app.run(host="0.0.0.0", port=5000)
