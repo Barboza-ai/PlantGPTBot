@@ -23,7 +23,7 @@ def generate_plant_response(user_text):
     """
 
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo"
+        model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a witty, emotional houseplant that gives helpful plant care advice."},
             {"role": "user", "content": prompt}
