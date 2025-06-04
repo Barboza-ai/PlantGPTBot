@@ -1,3 +1,6 @@
 flask
 requests
 openai
+torch
+torchvision
+pillow
